@@ -140,6 +140,9 @@ function formatDate(ts: number) {
   color: #fff;
   font-size: 28rpx;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .grid {
@@ -206,5 +209,6 @@ function formatDate(ts: number) {
   color: #4a4a48;
   font-size: 46rpx;
   box-shadow: 0 4px 12px rgba(166, 144, 118, 0.3);
+  z-index: 999;
 }
 </style>
