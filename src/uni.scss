@@ -1,5 +1,27 @@
 @import 'uview-plus/theme.scss';
-@import 'uview-plus/theme.scss';
+
+$ms-bg: #F7F5F0;
+$ms-card: #FDFCF8;
+$ms-wood-light: #D4C4A8;
+$ms-wood-dark: #A69076;
+$ms-text: #4A4A48;
+$ms-muted: #9E9B94;
+$ms-moss: #8FA895;
+
+$ms-radius: 8px;
+$ms-shadow: 0 2px 8px rgba(161, 152, 135, 0.1);
+$ms-border: 1px solid rgba(166, 144, 118, 0.15);
+
+page {
+  background: $ms-bg;
+  color: $ms-text;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 
 /**
  * 这里是uni-app内置的常用样式变量

@@ -1,25 +1,30 @@
 <template>
   <view class="page">
     <view class="guide">
-      <text class="guide-title">新建一条记忆</text>
-      <text class="guide-sub">先选一张图，再写一句话，最后选个心情。</text>
+      <text class="guide-title">新建记忆</text>
+      <text class="guide-sub">像翻开相册一样，留白给今天。</text>
     </view>
     <view class="section">
-      <text class="label">图片</text>
+      <text class="label">照片</text>
       <view class="image-row">
         <view v-if="imagePath" class="preview-wrap" @click="previewImage">
           <image class="preview" :src="imagePath" mode="aspectFill" />
         </view>
-        <text v-if="imagePath" class="path-hint">已选择</text>
-        <view v-else class="placeholder">
-          <text class="placeholder-text">未选择</text>
+        <view v-else class="placeholder" @click="pickImage">
+          <text class="placeholder-text">还没有照片</text>
         </view>
-        <u-button type="primary" size="small" @click="pickImage">拍照/选图</u-button>
+        <button class="icon-btn" @click="pickImage" aria-label="选择照片">
+          <svg class="camera" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.2 7.2L9.6 5.6H14.4L15.8 7.2H18.2C19.2 7.2 20 8 20 9V18.2C20 19.2 19.2 20 18.2 20H5.8C4.8 20 4 19.2 4 18.2V9C4 8 4.8 7.2 5.8 7.2H8.2Z" stroke="#A69076" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M12 16.2C13.6569 16.2 15 14.8569 15 13.2C15 11.5431 13.6569 10.2 12 10.2C10.3431 10.2 9 11.5431 9 13.2C9 14.8569 10.3431 16.2 12 16.2Z" stroke="#A69076" stroke-width="1.5"/>
+          </svg>
+        </button>
       </view>
+      <text class="hint">轻触相册或相机图标选择一张照片</text>
     </view>
 
     <view class="section">
-      <text class="label">写点什么</text>
+      <text class="label">文字</text>
       <textarea
         class="native-textarea"
         :value="text"
@@ -37,13 +42,19 @@
       <text class="label">心情</text>
       <view class="moods">
         <view class="mood-chip" :class="{ active: mood === 'happy' }" @click="mood = 'happy'">
-          <text>开心</text>
+          <text>🌸 开心</text>
         </view>
         <view class="mood-chip" :class="{ active: mood === 'sad' }" @click="mood = 'sad'">
-          <text>难过</text>
+          <text>🌧️ 难过</text>
         </view>
         <view class="mood-chip" :class="{ active: mood === 'calm' }" @click="mood = 'calm'">
-          <text>平静</text>
+          <text>🍵 平静</text>
+        </view>
+        <view class="mood-chip" :class="{ active: mood === 'melancholy' }" @click="mood = 'melancholy'">
+          <text>🍂 忧伤</text>
+        </view>
+        <view class="mood-chip" :class="{ active: mood === 'angry' }" @click="mood = 'angry'">
+          <text>🔥 生气</text>
         </view>
       </view>
     </view>
@@ -113,41 +124,51 @@ function submit() {
 
 <style scoped lang="scss">
 .page {
-  padding: 24rpx;
+  padding: 40rpx 24rpx 24rpx;
 }
 
 .guide {
-  padding: 18rpx 20rpx;
-  border-radius: 16rpx;
-  background: rgba(60, 156, 255, 0.08);
-  border: 2rpx solid rgba(60, 156, 255, 0.18);
+  padding: 18rpx 0;
   margin-bottom: 24rpx;
 }
 
 .guide-title {
   display: block;
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #0b3b8a;
-  margin-bottom: 6rpx;
+  font-size: 36rpx;
+  font-weight: 500;
+  color: #4a4a48;
+  letter-spacing: 0.5px;
 }
 
 .guide-sub {
   display: block;
-  font-size: 26rpx;
-  color: rgba(11, 59, 138, 0.75);
+  font-size: 24rpx;
+  color: #9e9b94;
+  margin-top: 8rpx;
 }
 
 .section {
-  margin-bottom: 24rpx;
+  margin-bottom: 26rpx;
+  padding: 16rpx;
+  border-radius: 16rpx;
+  background: #fdfcf8;
+  border: 1px solid rgba(166, 144, 118, 0.15);
+  box-shadow: 0 2px 8px rgba(161, 152, 135, 0.1);
 }
 
 .label {
   display: block;
   font-size: 28rpx;
-  font-weight: 600;
-  color: #111;
+  font-weight: 500;
+  color: #4a4a48;
   margin-bottom: 12rpx;
+}
+
+.hint {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #9e9b94;
 }
 
 .image-row {
@@ -162,7 +183,8 @@ function submit() {
   height: 160rpx;
   border-radius: 16rpx;
   overflow: hidden;
-  background: #f3f4f6;
+  background: #f0ece3;
+  border: 1px solid rgba(166, 144, 118, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,60 +193,77 @@ function submit() {
 .preview {
   width: 160rpx;
   height: 160rpx;
+  border-radius: 8rpx;
+}
+
+.icon-btn {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 999rpx;
+  background: #f0ece3;
+  border: 1px solid #a69076;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera {
+  width: 34rpx;
+  height: 34rpx;
 }
 
 .path-hint {
   flex: 1;
-  color: #16a34a;
+  color: #8fa895;
   font-size: 24rpx;
 }
 
 .native-textarea {
   width: 100%;
-  min-height: 240rpx;
-  padding: 18rpx;
-  border-radius: 16rpx;
-  background: #fff;
-  border: 2rpx solid rgba(0, 0, 0, 0.08);
+  min-height: 220rpx;
+  padding: 12rpx 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2rpx solid #d4c4a8;
   font-size: 28rpx;
-  line-height: 40rpx;
+  line-height: 44rpx;
+  color: #4a4a48;
   box-sizing: border-box;
 }
 
 .moods {
   display: flex;
-  gap: 16rpx;
+  flex-wrap: wrap;
+  gap: 12rpx;
 }
 
 .mood-chip {
-  padding: 16rpx 22rpx;
-  border-radius: 999rpx;
-  background: #fff;
-  border: 2rpx solid rgba(0, 0, 0, 0.08);
-  color: #111;
-  font-size: 28rpx;
+  padding: 14rpx 18rpx;
+  border-radius: 40rpx;
+  background: transparent;
+  border: 1px solid rgba(166, 144, 118, 0.35);
+  color: #4a4a48;
+  font-size: 26rpx;
 }
 
 .mood-chip.active {
-  border-color: #3c9cff;
-  background: rgba(60, 156, 255, 0.12);
-  color: #0b3b8a;
+  background: #f0ece3;
+  border: 1px solid #a69076;
 }
 
 .primary-btn {
   width: 100%;
   height: 88rpx;
   line-height: 88rpx;
-  border-radius: 16rpx;
-  background: #3c9cff;
+  border-radius: 40rpx;
+  background: #a69076;
   color: #fff;
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
 }
 
 .primary-btn[disabled] {
-  background: #c8c9cc;
-  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.55;
 }
 
 .placeholder-text {
@@ -239,7 +278,7 @@ function submit() {
 
 .counter-text {
   font-size: 24rpx;
-  color: #999;
+  color: #9e9b94;
 }
 
 .actions {

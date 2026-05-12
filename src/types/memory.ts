@@ -1,4 +1,4 @@
-export type Mood = 'happy' | 'sad' | 'calm'
+export type Mood = 'happy' | 'sad' | 'calm' | 'melancholy' | 'angry'
 
 export interface MemoryCard {
   id: string
