@@ -30,5 +30,11 @@ export const useMemoryStore = defineStore('memory', {
       this.persist()
       return card
     },
+    removeCard(id: string) {
+      const idx = this.cards.findIndex((c) => c.id === id)
+      if (idx === -1) return
+      this.cards.splice(idx, 1)
+      this.persist()
+    },
   },
 })

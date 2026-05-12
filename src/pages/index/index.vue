@@ -1,8 +1,11 @@
 <template>
   <view class="page">
     <view class="header">
-      <text class="title">记忆切片</text>
-      <text class="subtitle">像写手账一样，留住今天</text>
+      <view class="header-left">
+        <text class="title">记忆切片</text>
+        <text class="subtitle">像写手账一样，留住今天</text>
+      </view>
+      <button class="new-btn" @click="goCreate">＋ 新建</button>
     </view>
 
     <view v-if="cards.length === 0" class="empty">
@@ -14,6 +17,9 @@
 
     <view v-else class="grid">
       <view v-for="card in cards" :key="card.id" class="card" @click="openCard(card.id)">
+        <view class="card-actions">
+          <button class="more-btn" @click.stop="openMenu(card.id)">⋯</button>
+        </view>
         <image v-if="card.imagePath" class="card-image" :src="card.imagePath" mode="aspectFill" />
         <view class="card-body">
           <view class="card-meta">
@@ -24,8 +30,6 @@
         </view>
       </view>
     </view>
-
-    <button class="fab" @click="goCreate">＋</button>
   </view>
 </template>
 
@@ -61,6 +65,26 @@ function openCard(id: string) {
   uni.showToast({ title: `TODO 详情页：${id}`, icon: 'none' })
 }
 
+function openMenu(id: string) {
+  uni.showActionSheet({
+    itemList: ['删除'],
+    success: () => {
+      uni.showModal({
+        title: '确认撕掉这一页？',
+        content: '这条记忆会从本地移除，无法恢复。',
+        confirmText: '删除',
+        confirmColor: '#A69076',
+        cancelText: '再想想',
+        success: (res) => {
+          if (res.confirm) {
+            store.removeCard(id)
+          }
+        },
+      })
+    },
+  })
+}
+
 function moodLabel(mood: Mood) {
   if (mood === 'happy') return '🌸 开心'
   if (mood === 'sad') return '🌧️ 难过'
@@ -85,6 +109,14 @@ function formatDate(ts: number) {
 
 .header {
   padding: 28rpx 0 18rpx;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.header-left {
+  min-width: 0;
 }
 
 .title {
@@ -100,6 +132,18 @@ function formatDate(ts: number) {
   font-size: 24rpx;
   color: #9e9b94;
   margin-top: 6rpx;
+}
+
+.new-btn {
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0 18rpx;
+  border-radius: 40rpx;
+  background: transparent;
+  border: 1px solid #a69076;
+  color: #a69076;
+  font-size: 24rpx;
+  white-space: nowrap;
 }
 
 .empty {
@@ -158,6 +202,25 @@ function formatDate(ts: number) {
   background: #fdfcf8;
   box-shadow: 0 2px 8px rgba(161, 152, 135, 0.1);
   border: 1px solid rgba(166, 144, 118, 0.15);
+  position: relative;
+}
+
+.card-actions {
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+  z-index: 2;
+}
+
+.more-btn {
+  width: 52rpx;
+  height: 52rpx;
+  line-height: 52rpx;
+  border-radius: 999rpx;
+  background: rgba(247, 245, 240, 0.9);
+  border: 1px solid rgba(166, 144, 118, 0.25);
+  color: #4a4a48;
+  font-size: 30rpx;
 }
 
 .card-image {
@@ -197,18 +260,4 @@ function formatDate(ts: number) {
   overflow: hidden;
 }
 
-.fab {
-  position: fixed;
-  right: 18rpx;
-  bottom: 22rpx;
-  width: 104rpx;
-  height: 104rpx;
-  line-height: 104rpx;
-  border-radius: 999rpx;
-  background: #d4c4a8;
-  color: #4a4a48;
-  font-size: 46rpx;
-  box-shadow: 0 4px 12px rgba(166, 144, 118, 0.3);
-  z-index: 999;
-}
 </style>
